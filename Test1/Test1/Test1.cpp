@@ -2,180 +2,39 @@
 //
 
 #include <iostream>
-#include <cassert>
+#include <crtdbg.h>
+#include <memory>
+#include <string>
+#include "calculator.h"
 
-int add_expression(const char* exp, int& new_index);
-
-int read_number(const char* expression, int& index)
-{
-    int number = 0;
-
-    for (int i = index; expression[i] != NULL; i++)
-    {
-        if (isdigit(expression[i]))
-        {
-            number *= 10;
-            number += expression[i] - '0';
-
-            index++;
-        }
-        else
-        {
-            return number;
-        }
-    }
-
-    return number;
-}
-
-char read_add_operator(const char* exp, int& index)
-{
-    switch (exp[index])
-    {
-    case '+':
-    case '-':
-        return exp[index++];
-    default:
-        return ' ';
-    }
-}
-
-char read_mul_operator(const char* exp, int& index)
-{
-    switch (exp[index])
-    {
-    case '*':
-    case '/':
-        return exp[index++];
-    default:
-        return ' ';
-    }
-}
-
-int pri_exp(const char* exp, int& new_index)
-{
-    if (exp[new_index] == '(')
-    {
-        int result = add_expression(exp, ++new_index);
-
-        assert(exp[new_index++] == ')');
-
-        return result;
-    }
-    else
-    {
-        return read_number(exp, new_index);
-    }
-}
-
-int mul_expression(const char* exp, int& new_index)
-{
-    int num1 = 0;
-    int num2 = 0;
-    char op;
-
-    int tmp_index = new_index;
-    num1 = pri_exp(exp, new_index);
-    if (tmp_index == new_index)
-    {
-        printf("syntex error at column : %d \n", new_index);
-        return 0;
-    }
-
-    tmp_index = new_index;
-    op = read_mul_operator(exp, new_index);
-    if (tmp_index == new_index)
-    {
-        return num1;
-    }
-
-    
-    tmp_index = new_index;
-    num2 = mul_expression(exp, new_index);
-    if (tmp_index == new_index)
-    {
-        printf("syntex error at column : %d \n", new_index);
-        return 0;
-    }
-
-
-    int result = 0;
-    switch (op)
-    {
-    case '*':
-        result = num1 * num2;
-        break;
-    case '/':
-        result = num1 / num2;
-        break;
-    }
-
-    printf("%d %c %d \n", num1, op, num2);
-
-    return result;
-}
-
-int add_expression(const char* exp, int& new_index)
-{
-    int num1 = 0;
-    int num2 = 0;
-    char op;
-
-    int tmp_index = new_index;
-    num1 = mul_expression(exp, new_index);
-    if (tmp_index == new_index)
-    {
-        printf("syntex error at column : %d \n", new_index);
-        return 0;
-    }
-
-    tmp_index = new_index;
-    op = read_add_operator(exp, new_index);
-    if (tmp_index == new_index)
-    {
-        return num1;
-    }
-
-
-    tmp_index = new_index;
-    num2 = add_expression(exp, new_index);
-    if (tmp_index == new_index)
-    {
-        printf("syntex error at column : %d \n", new_index);
-        return 0;
-    }
-
-
-    int result = 0;
-    switch (op)
-    {
-    case '+':
-        result = num1 + num2;
-        break;
-    case '-':
-        result = num1 - num2;
-        break;
-    }
-
-    printf("%d %c %d \n", num1, op, num2);
-
-    return result;
-}
+using namespace std;
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    // <crtdbg.h> memory leak 관련 debug 함수
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-    char exp[256];
+    cout << "Hello World!\n";
+
+    string exp;
     int index = 0;
 
-    std::cin >> exp;
+    cin >> exp;
 
-    printf("%s \n", exp);
+    printf("%s \n", exp.c_str());
 
-    int result = add_expression(exp, index);
+    // <memory> 자동 생성 해제
+    // 해제는 { } 지역이 끝나면 해제
+    // { } 지역으로 감싸보면 테스트 출력문으로 확인 가능
+    //std::unique_ptr<calculator> cal = std::make_unique<calculator>();
+    //calculator cal;
+
+    //universal constructor 객체 한번만 사용할때
+    int result = calculator{}.evaluate(exp);
 
     printf("= %d \n", result);
+
+    cout << "program end" << endl;
 }
 
 // 프로그램 실행: <Ctrl+F5> 또는 [디버그] > [디버깅하지 않고 시작] 메뉴
