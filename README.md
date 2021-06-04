@@ -33,6 +33,7 @@ sin, cos, log, unary operator
 
 *hint*
 sin,cos,log -> pri_exp
+
 unary oper = number
 
 규칙 추가?
