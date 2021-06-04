@@ -2,13 +2,13 @@
 #include<iostream>
 #include<cassert>
 
-int calculator::evaluate(string_view exp) const
+int calculator::evaluate(const string& exp) const
 {
     int index = 0;
 	return add_expression(exp, index);
 }
 
-int calculator::read_number(string_view expression, int& index) const
+int calculator::read_number(const string& expression, int& index) const
 {
     int number = 0;
 
@@ -30,7 +30,7 @@ int calculator::read_number(string_view expression, int& index) const
     return number;
 }
 
-char calculator::read_add_operator(string_view exp, int& index) const
+char calculator::read_add_operator(const string& exp, int& index) const
 {
     switch (exp[index])
     {
@@ -42,7 +42,7 @@ char calculator::read_add_operator(string_view exp, int& index) const
     }
 }
 
-char calculator::read_mul_operator(string_view exp, int& index) const
+char calculator::read_mul_operator(const string& exp, int& index) const
 {
     switch (exp[index])
     {
@@ -54,7 +54,7 @@ char calculator::read_mul_operator(string_view exp, int& index) const
     }
 }
 
-int calculator::pri_exp(string_view exp, int& new_index) const
+int calculator::pri_exp(const string& exp, int& new_index) const
 {
     if (exp[new_index] == '(')
     {
@@ -70,7 +70,7 @@ int calculator::pri_exp(string_view exp, int& new_index) const
     }
 }
 
-int calculator::mul_expression(string_view exp, int& new_index) const
+int calculator::mul_expression(const string& exp, int& new_index) const
 {
     int num1 = 0;
     int num2 = 0;
@@ -117,7 +117,7 @@ int calculator::mul_expression(string_view exp, int& new_index) const
     return result;
 }
 
-int calculator::add_expression(string_view exp, int& new_index) const
+int calculator::add_expression(const string& exp, int& new_index) const
 {
     int num1 = 0;
     int num2 = 0;

@@ -11,6 +11,7 @@ using namespace std;
 
 int main()
 {
+    // <crtdbg.h> memory leak 관련 debug 함수
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
     cout << "Hello World!\n";
@@ -19,14 +20,17 @@ int main()
     int index = 0;
 
     cin >> exp;
-    
-    char szexp[256] = "1+2*3";
 
     printf("%s \n", exp.c_str());
 
-    int result = calculator{}.evaluate(szexp);
-    //evaluate는 string을 받는데 int를 주면 error가 나지만 char을 주는건 왜 상관이 없는지 
-    //string에 생성자가 암시적 형변환을 해주기 때문에
+    // <memory> 자동 생성 해제
+    // 해제는 { } 지역이 끝나면 해제
+    // { } 지역으로 감싸보면 테스트 출력문으로 확인 가능
+    //std::unique_ptr<calculator> cal = std::make_unique<calculator>();
+    //calculator cal;
+
+    //universal constructor 객체 한번만 사용할때
+    int result = calculator{}.evaluate(exp);
 
     printf("= %d \n", result);
 
