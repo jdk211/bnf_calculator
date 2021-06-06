@@ -22,13 +22,12 @@ int main()
     
     char szexp[256] = "1+2*3";
 
+    exp += " ";
     printf("%s \n", exp.c_str());
 
-    int result = calculator{}.evaluate(szexp);
-    //evaluate는 string을 받는데 int를 주면 error가 나지만 char을 주는건 왜 상관이 없는지 
-    //string에 생성자가 암시적 형변환을 해주기 때문에
+    //int result = calculator{}.evaluate(exp);
 
-    printf("= %d \n", result);
+    //printf("= %d \n", result);
 
     cout << "program end" << endl;
 }
