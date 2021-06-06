@@ -23,6 +23,58 @@ int calculator::read_number(string_view expression, int& index) const
         }
         else
         {
+            switch (expression[i])
+            {
+            case '+':
+                if (index != 0)
+                {
+                    if (!isdigit(expression[i - 1]) && isdigit(expression[i + 1]))
+                    {
+                        return read_number(expression, ++index);
+                    }
+                    else
+                    {
+                        return number;
+                    }
+                }
+                else
+                {
+                    if (isdigit(expression[i + 1]))
+                    {
+                        return read_number(expression, ++index);
+                    }
+                    else
+                    {
+                        return number;
+                    }
+                }
+            case '-':
+                if (index != 0)
+                {
+                    if (!isdigit(expression[i - 1]) && isdigit(expression[i + 1]))
+                    {
+                        return -1 * read_number(expression, ++index);
+                    }
+                    else
+                    {
+                        return number;
+                    }
+                }
+                else
+                {
+                    if (isdigit(expression[i + 1]))
+                    {
+                        return -1 * read_number(expression, ++index);
+                    }
+                    else
+                    {
+                        return number;
+                    }
+                }
+            default:
+                break;
+            }
+
             return number;
         }
     }
@@ -66,6 +118,56 @@ int calculator::pri_exp(string_view exp, int& new_index) const
     }
     else
     {
+        string pri_str[3] = { "sin(", "cos(", "log(" };
+        string tmp_str = "";
+        float result = 0.0f;
+
+        if (tolower(exp[new_index]) == 's')
+        {
+            for (int i = 0; i < pri_str[0].length(); i++)
+            {
+                tmp_str += exp[new_index++];
+            }
+            if (tmp_str == "sin(")
+            {
+                result = add_expression(exp, new_index);
+
+                assert(exp[new_index++] == ')');
+
+                return sin(result);
+            }
+        }
+        else if (tolower(exp[new_index] == 'c'))
+        {
+            for (int i = 0; i < pri_str[1].length(); i++)
+            {
+                tmp_str += exp[new_index++];
+            }
+            if (tmp_str == "cos(")
+            {
+                result = add_expression(exp, new_index);
+
+                assert(exp[new_index++] == ')');
+
+                return cos(result);
+            }
+        }
+        else if (tolower(exp[new_index] == 'l'))
+        {
+            for (int i = 0; i < pri_str[2].length(); i++)
+            {
+                tmp_str += exp[new_index++];
+            }
+            if (tmp_str == "log(")
+            {
+                result = add_expression(exp, new_index);
+
+                assert(exp[new_index++] == ')');
+
+                return log(result);
+            }
+        }
+
         return read_number(exp, new_index);
     }
 }
