@@ -25,6 +25,25 @@ add_exp := add_exp add_oper mul_exp
 
 --------------------------------------------------
 
+bnf 
+digit := '0','1','2','3','4','5','6','7','8','9'
+add_oper := '+','-'
+mul_oper := '*','/'
+unary_oper := '+', '-'
+number := digit
+number := number digit
+
+unary_exp := number
+unary_exp := unary_oper add_exp
+func_exp := unary_exp
+func_exp := sin(add_exp), cos(add_exp), log(add_exp) 
+pri_exp :=  func_exp
+pri_exp := ( add_exp )
+mul_exp := pri_exp 
+mul_exp := mul_exp mul_oper pri_exp
+add_exp := mul_exp
+add_exp := add_exp add_oper mul_exp
+
 
 =============homework===============
 
@@ -50,10 +69,6 @@ mul_exp := mul_exp mul_oper pri_exp
 add_exp := mul_exp
 add_exp := add_exp add_oper mul_exp
 
-
-
-
-
 =============homework===============
 sin, cos, log, unary operator
 
@@ -63,6 +78,8 @@ unary oper = number
 에 규칙 추가?
 
 숙제 -> T.at(), T[] 차이점
+operator []는 범위 검사를 하지 않고, 존재하지 않는 요소에 접근할때 정의되지 않은 동작이 발생
+.at() 맴버함수는 범위 검사를 수행하고 존재하지 않는 요소에 접근할때 정의된 예외를 발생
 
 decltype() -> 뭘까
 
@@ -79,5 +96,6 @@ end -> length() -1, length() 차이.....
 
 이전에 new delete로 객체를 생성 소멸을 했다면
 std::unique_ptr<T>를 사용해서 생성과 소멸을 자동으로 관리한다.
+std::unique_ptr<calculator> cal = std::make_unique<calculator>();
 
 변수명 앞에 _를 붙이면 컴파일러에 _로 시작하는 예약어들이 많기 때문에 될수있으면 뒤에 붙인다.
